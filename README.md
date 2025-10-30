@@ -9,7 +9,7 @@ The VN30 index fluctuates more strongly than the general market, specifically th
 
 VN30 has 12 different industries, with the banking industry accounts for nearly half (46.67%) of VN's structure with 14 stocks, followed by the real estate industry with 3 stocks (10%) and food & beverage with 3 stocks (10%)
 
-The stock filter helps filter Top N stocks that meet the criteria of % price increase, % price decrease, trading volume and valuation criteria P/E, P/B, helping investors have many options to choose suitable investment opportunities.Investors can track price charts and analyze financial indicators to identify market trends and the performance of each stock over time. This helps make more accurate investment decisions.
+The stock filter helps filter Top N stocks that meet the criteria of % price increase, % price decrease, trading volume and valuation criteria P/E, P/B, helping investors have many options to choose suitable investment opportunities.Investors can track price charts and analyze financial indicators to identify market trends and the performance of each stock over time. 
 
 In 2024,net revenue, pre-tax and after-tax income all increased by approximately 20%, demonstrating that FPT manages operating costs very effectively and optimally. This is also seen through profitability indicators, when all three indicators have been flat for a very long period. Regarding financial situation: FPT maintains a debt/equity ratio of approximately 50% and does not fluctuate too much over the years. The company also has payment ratios greater than 1, showing its ability to meet maturing debts, with low risk of default.
 
