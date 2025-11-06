@@ -11,7 +11,9 @@ CSV Dataset->Power BI->Dashboard->Phân tích và trực quan hóa kết quả
 III. Các bước thực hiện
 
 3.1: Input data
+
 -Input dữ liệu giá cổ phiếu VN30 và chỉ số VNINDEX (giai đoạn 2015–2024).
+
 -Input các chỉ số tài chính của các công ty VN30 trong giai đoạn từ 2015 đến 2024
 
 3.2: Xây dựng database schema
