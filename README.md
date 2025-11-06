@@ -1,12 +1,15 @@
 I. Ngữ cảnh
+
 Dự án Final Project MD02 được thực hiện với mục tiêu phân tích dữ liệu chứng khoán VN30 nhằm cung cấp thông tin về:Xu hướng biến động giá cổ phiếu qua các năm, phân tích cơ bản doanh nghiệp (ROA, ROE, EPS, Nợ/VCSH, v.v.)và định giá cổ phiếu qua các chỉ số P/E, P/B
 Báo cáo được xây dựng bằng Power BI với dữ liệu gốc là CSV Datasets.
 Báo cáo nhằm mục tiêu đưa ra khuyến nghị các cổ phiếu nên đầu tư.
 
 II. Flowchart
+
 CSV Dataset->Power BI->Dashboard->Phân tích và trực quan hóa kết quả
 
 III. Các bước thực hiện
+
 3.1: Input data
 -Input dữ liệu giá cổ phiếu VN30 và chỉ số VNINDEX (giai đoạn 2015–2024).
 -Input các chỉ số tài chính của các công ty VN30 trong giai đoạn từ 2015 đến 2024
