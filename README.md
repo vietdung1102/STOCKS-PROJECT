@@ -1,7 +1,9 @@
 I. Context
 
-The Final Project MD02 was done with the goal of analyzing VN30 stock data to provide information on: Trends in stock price fluctuations over the years, analysis of business fundamentals (ROA, ROE, EPS, Debt/Equity, etc.) and stock valuation through P/E, P/B ratios
+The Final Project MD02 was done with the goal of analyzing VN30 stock data to provide information on: Trends in stock price fluctuations over the years, analysis of business fundamentals (ROA, ROE, EPS, Debt/Equity, etc.) and stock valuation through P/E, P/B ratios.
+
 The report was built by using Power BI with the original data being the CSV Datasets.
+
 The goal is to give recommendations on which stocks to invest in.
 
 II. Flowchart
