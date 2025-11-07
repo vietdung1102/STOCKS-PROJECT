@@ -1,26 +1,28 @@
-I. Ngữ cảnh
+I. Context
 
-Dự án Final Project MD02 được thực hiện với mục tiêu phân tích dữ liệu chứng khoán VN30 nhằm cung cấp thông tin về:Xu hướng biến động giá cổ phiếu qua các năm, phân tích cơ bản doanh nghiệp (ROA, ROE, EPS, Nợ/VCSH, v.v.)và định giá cổ phiếu qua các chỉ số P/E, P/B
-Báo cáo được xây dựng bằng Power BI với dữ liệu gốc là CSV Datasets.
-Báo cáo nhằm mục tiêu đưa ra khuyến nghị các cổ phiếu nên đầu tư.
+The Final Project MD02 was done with the goal of analyzing VN30 stock data to provide information on: Trends in stock price fluctuations over the years, analysis of business fundamentals (ROA, ROE, EPS, Debt/Equity, etc.) and stock valuation through P/E, P/B ratios
+The report was built by using Power BI with the original data being the CSV Datasets.
+The goal is to give recommendations on which stocks to invest in.
 
 II. Flowchart
 
-CSV Dataset->Power BI->Dashboard->Phân tích và trực quan hóa kết quả
+CSV Dataset->Power BI->Dashboard->Analyze and visualize results
 
-III. Các bước thực hiện
+III. Steps
 
 3.1: Input data
 
--Input dữ liệu giá cổ phiếu VN30 và chỉ số VNINDEX (giai đoạn 2015–2024).
+-Input VN30 stock price data and VNINDEX index (period 2015–2024).
 
--Input các chỉ số tài chính của các công ty VN30 trong giai đoạn từ 2015 đến 2024
+-Input financial indicators of VN30 companies in the period from 2015 to 2024
 
-3.2: Xây dựng database schema
+3.2: Building database schema
 
--Tạo các bảng sau trong power BI:Bảng dim, Bảng dim B/S Account,Bảng dim Company,Bảng dim I/S Account,Bảng dim mã chứng khoán,Bảng dim ngày giao dịch, Bảng dim year, Bảng dữ liệu lịch sử VN30, Bảng fact B/S, Bảng fact I/S, Bảng VN30
+-Create these tables in power BI:dim,dim B/S Account,dim Company,dim I/S Account,dim mã chứng khoán,dim ngày giao dịch, dim year, dữ liệu lịch sử VN30,fact B/S, fact I/S, VN30
 
--Thiết lập một vài measure=DAX để tính toán chỉ số
+-Create DAX Measures to calculate some metrics:
+
+Example:
 
  +P_B_Ratio = 
 VAR LastYear = CALCULATE(MAX('DIm_Ngày giao dịch'[Ngày]),ALL('DIm_Ngày giao dịch'[Day],'DIm_Ngày giao dịch'[Month]))
@@ -61,49 +63,42 @@ RETURN
         CALCULATE(SUM(VN30[% Thay đổi]))  
     )
     
-3.3: Xây dựng dashboard
+3.3: Building dashboard
+The dashboard is consisted of 3 pages:
 
-Dashboard gồm 3 trang chính:
+1. VN30 overview includes: Compare VN30 vs VNINDEX index, VN30 price table (high, low, close, volatility, volume), VN30 industry structure (pie chart), Candlestick chart & Bollinger Band technical analysis by year
+2. Stock filter includes: Top N stock filter (Top increase, decrease, highest trading volume), P/E, P/B chart by stock code and by year
+P/E (Price to Earnings Ratio): is the ratio between stock price and profit per share (EPS). This index shows the price that investors are willing to pay for each dollar of profit that the company generates.
+Compared to the industry: When the P/E is higher than the industry average, the stock may be overvalued, while a low P/E may indicate that the stock is undervalued.
+P/B is the ratio of the stock price to the book value per share (BVPS). It shows the price that investors pay compared to the real value of the company's assets. A high P/B may indicate that the stock price is too high compared to the real value of the assets. Conversely, a low P/B indicates potential undervaluation.
 
-1. Tổng quan VN30 bao gồm: So sánh chỉ số VN30 vs VNINDEX, Bảng giá VN30 (cao, thấp, đóng, biến động, KL), Cơ cấu ngành VN30 (Biểu đồ tròn), Biểu đồ nến & Bollinger Band phân tích kỹ thuật theo năm
+3. Basic analysis of the business
 
-2.Bộ lọc cổ phiếu bao gồm: Bộ lọc Top N cổ phiếu (Top tăng giá, giảm giá, KL giao dịch cao nhất), Biểu đồ P/E, P/B theo mã cổ phiếu và theo năm
+Net revenue: the amount of money earned from business activities after deducting related expenses such as taxes and deductions
+Earnings before tax (EBIT – Earnings Before Interest and Taxes): reflects the profitability of the business before deducting interest expenses and corporate income tax.
+Profit after tax (Profit After Tax) is the remaining profit after deducting expenses, including corporate income tax.
+ROA is the ratio of net profit to assets (Return on total assets), which is an indicator to measure the profitability of each unit of the company's assets.
 
-P/E (Price to Earnings Ratio): là tỷ lệ giữa giá cổ phiếu và lợi nhuận trên mỗi cổ phiếu (EPS). Chỉ số này cho biết mức giá mà nhà đầu tư sẵn lòng trả cho mỗi đồng lợi nhuận mà công ty tạo ra.
-So với ngành: Khi P/E cao hơn trung bình ngành, cổ phiếu có thể được định giá quá cao, trong khi một P/E thấp có thể cho thấy cổ phiếu đang bị định giá thấp.
-P/B là tỷ lệ giữa giá cổ phiếu và giá trị sổ sách trên mỗi cổ phiếu (BVPS). Nó cho biết mức giá mà nhà đầu tư trả so với giá trị tài sản thực của công ty.Một P/B cao có thể cho thấy giá cổ phiếu quá cao so với giá trị thực của tài sản. Ngược lại, P/B thấp cho thấy tiềm năng định giá thấp.
+ROE is the Return on Common Equity, which measures the profitability of each dollar of common stockholders' equity.
+EBIT is the profit a company makes from its operations, before interest and corporate income tax payments.
+Current ratio shows the ratio of current assets to current liabilities, reflecting the company's current ability to pay off its current liabilities.
+The quick ratio shows how well a company can pay off short-term debts with highly liquid assets such as cash and cash equivalents.
+EPS (Earnings per Share) measures a company's after-tax profit allocated to each outstanding common share
+IV. Values gained
+4.1 Skills
 
-3.Phân tích cơ bản doanh nghiệp
+Processing and analyzing financial data using Power BI
 
-Doanh thu thuần: số tiền thu được từ hoạt động kinh doanh sau khi đã trừ đi các chi phí liên quan như các loại thuế và các khoản giảm trừ 
-Thu nhuận trước thuế (EBIT – Earnings Before Interest and Taxes): phản ánh khả năng sinh lời của doanh nghiệp trước khi trừ các khoản chi phí lãi vay và thuế thu nhập doanh nghiệp.
-Thu nhuận sau thuế (Profit After Tax) là khoản lợi nhuận còn lại sau khi đã trừ các chi phí, bao gồm cả thuế thu nhập doanh nghiệp.
-ROA là tỷ số lợi nhuận ròng trên tài sản (Return on total assets), là chỉ tiêu đo lường khả năng sinh lợi trên mỗi đồng tài sản của công ty.
-ROE là tỷ số lợi nhuận ròng trên vốn chủ sở hữu (Return on common equyty), là tỷ số đo lường khả năng sinh lợi trên mỗi đồng vốn của cổ đông thường.
-EBIT là một khoản lợi nhuận mà một công ty thu được từ việc kinh doanh, chưa trừ đi các khoản trả lãi vay và thuế thu nhập doanh nghiệp.
-Chỉ số thanh toán hiện hành cho biết tỉ số giữa tài sản lưu động hiện có và nợ ngắn hạn, phản ánh khả năng hiện tại của doanh nghiệp trong việc thanh toán các khoản nợ ngắn hạn đó.
-Chỉ số thanh toán nhanh thể hiện khả năng doanh nghiệp có thể thanh toán các khoản vay ngắn hạn bằng những tài sản có tính thanh khoản cao như tiền và các khoản tương đương tiền. 
-EPS (Lợi nhuận trên mỗi cổ phần) chỉ số đo lường lợi nhuận sau thuế của một công ty được phân bổ cho mỗi cổ phiếu phổ thông đang lưu hành
+Designing financial dashboards
 
-IV. Giá trị đạt được
+Writing DAX formulas to visualize financial indicators
 
-4.1 Kỹ năng phát triển
+Data Storytelling
+4.2 Knowledge
 
-Xử lý và phân tích dữ liệu tài chính bằng Power BI
+Compare the fluctuations between VN30 and VNINDEX
 
-Thiết kế dashboard chuyên nghiệp về tài chính
+Understand the basic financial indicators
 
-Viết công thức DAX để để trực quan hóa các chỉ số tài chính 
-
-Kể chuyện bằng dữ liệu (Data Storytelling)
-
-4.2 Kiến thức nắm được
-
-Hiểu cấu trúc và vận hành của chỉ số VN30, VNINDEX
-
-Nắm rõ các chỉ số tài chính cơ bản và cách diễn giải
-
-Biết cách so sánh và đánh giá cổ phiếu theo thời gian và theo ngành
-
-Thành thạo quy trình ETL (Extract – Transform – Load) và mô hình hóa dữ liệu trong Power BI
+Compare and evaluate stock values ​​over a period of a time and among different groups of industry.
 
