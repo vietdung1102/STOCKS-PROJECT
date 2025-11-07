@@ -64,6 +64,7 @@ RETURN
     )
     
 3.3: Building dashboard
+
 The dashboard is consisted of 3 pages:
 
 1. VN30 overview includes: Compare VN30 vs VNINDEX index, VN30 price table (high, low, close, volatility, volume), VN30 industry structure (pie chart), Candlestick chart & Bollinger Band technical analysis by year
