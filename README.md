@@ -70,6 +70,7 @@ The dashboard is consisted of 3 pages:
 1. VN30 overview includes: Compare VN30 vs VNINDEX index, VN30 price table (high, low, close, volatility, volume), VN30 industry structure (pie chart), Candlestick chart & Bollinger Band technical analysis by year
 
 2. Stock filter includes:
+   
 Top N stock filter (Top increase, decrease, highest trading volume), P/E, P/B chart by stock code and by year
 
 P/E (Price to Earnings Ratio): is the ratio between stock price and profit per share (EPS). This index shows the price that investors are willing to pay for each dollar of profit that the company generates.Compared to the industry: When the P/E is higher than the industry average, the stock may be overvalued, while a low P/E may indicate that the stock is undervalued.
