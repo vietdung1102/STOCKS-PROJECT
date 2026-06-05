@@ -1,7 +1,7 @@
 # Báo cáo Tổng quan Dự án: Phân tích & Dự phóng Cổ phiếu Ngân hàng
 
 ## 1. Ngữ cảnh (Context)
-Dự án được khởi xướng xuất phát từ **nhu cầu thực tế của một nhóm nhà đầu tư (người quen)** quan tâm sâu sắc đến nhóm cổ phiếu ngân hàng (đặc biệt là các ngân hàng có trụ sở hoặc tầm ảnh hưởng lớn tại miền Bắc và các mã trụ cột như VCB, ACB, TCB, VPB, TPB). 
+Dự án được khởi xướng xuất phát từ **nhu cầu thực tế của một nhóm nhà đầu tư** quan tâm sâu sắc đến nhóm cổ phiếu ngân hàng (đặc biệt là các ngân hàng có trụ sở hoặc tầm ảnh hưởng lớn tại miền Bắc và các mã trụ cột như VCB, ACB, TCB, VPB, TPB). 
 
 Thị trường chứng khoán luôn biến động và việc ra quyết định phụ thuộc vào quá nhiều biến số phân mảnh. Các nhà đầu tư cần một hệ thống có khả năng:
 - Định lượng hóa sức mạnh Mua/Bán của cổ phiếu thay vì cảm tính.
