@@ -1,4 +1,4 @@
-# Dataset Overview: Phân tích & Dự phóng Cổ phiếu Ngân hàng
+A. Dataset Overview: Phân tích & Dự phóng Cổ phiếu Ngân hàng
 
 Mô tả Dataset & Cấu trúc Schema Hệ thống (Database Architecture)
 Cơ sở dữ liệu của dự án được triển khai trên PostgreSQL và được tổ chức theo kiến trúc kho dữ liệu chuẩn gồm hai vùng (Schemas):
@@ -99,3 +99,5 @@ value (VARCHAR): Giá trị hiện hành của chỉ báo.
 signal (VARCHAR): Tín hiệu hành động (Buy / Sell / Neutral).
 strength (VARCHAR): Sức mạnh của tín hiệu (Ví dụ: "70% Buy").
 description (TEXT): Nhận xét xu hướng hoặc giải thích độ dốc (Ví dụ: "Xu hướng 5 năm (Giảm -1.4%/năm)").
+
+B. Phân tích Dashboard 
