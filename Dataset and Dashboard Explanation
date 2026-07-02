@@ -1,5 +1,7 @@
+# Dataset Overview: Phân tích & Dự phóng Cổ phiếu Ngân hàng
+
 Mô tả Dataset & Cấu trúc Schema Hệ thống (Database Architecture)
-Cơ sở dữ liệu của dự án được triển khai trên PostgreSQL và được tổ chức theo kiến trúc kho dữ liệu chuẩn gồm hai vùng (Schemas)
+Cơ sở dữ liệu của dự án được triển khai trên PostgreSQL và được tổ chức theo kiến trúc kho dữ liệu chuẩn gồm hai vùng (Schemas):
 
 Vùng Staging (stg): Lưu trữ dữ liệu thô (raw data) được nạp trực tiếp từ các tệp Excel/CSV hoặc API.
 Vùng Kho Dữ Liệu (dwh): Lưu trữ dữ liệu đã được làm sạch, biến đổi và tổ chức theo mô hình hình sao (Star Schema) phục vụ phân tích, chạy mô hình Học máy (Machine Learning) và trực quan hóa lên Power BI.
@@ -18,3 +20,14 @@ close (NUMERIC): Giá đóng cửa.
 volumn (NUMERIC): Khối lượng giao dịch.
 tổng buy của nhà đầu tư ngoại (NUMERIC): Khối lượng khối ngoại mua.
 tổng sell của nhà đầu tư ngoại (NUMERIC): Khối lượng khối ngoại bán.
+1.2 Các bảng báo cáo tài chính (Financial Reports)
+Các bảng thành phần:
+Bảng cân đối kế toán (Balance Sheet) theo năm/quý: stg.stg_<bank>_balance_sheet_yearly / _quarterly
+Báo cáo kết quả kinh doanh (Income Statement) theo năm/quý: stg.stg_<bank>_income_statement_yearly / _quarterly
+Bảng chi tiết báo cáo tài chính: stg.stg_<bank>_fin_detail_bctc
+Các trường dữ liệu (Columns):
+item_id (VARCHAR): Mã định danh chỉ tiêu tài chính.
+item / item_en (VARCHAR): Tên chỉ tiêu tiếng Việt và tiếng Anh.
+2021, 2022, 2023, 2024, 2025 (NUMERIC): Giá trị của chỉ tiêu theo từng năm tương ứng.
+2021-Q1 đến 2026-Q1 (NUMERIC): Giá trị của chỉ tiêu theo từng quý.
+
