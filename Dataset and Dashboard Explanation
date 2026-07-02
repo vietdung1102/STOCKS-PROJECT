@@ -1,2 +1,20 @@
-Dataset Overview
-Projec
+Mô tả Dataset & Cấu trúc Schema Hệ thống (Database Architecture)
+Cơ sở dữ liệu của dự án được triển khai trên PostgreSQL và được tổ chức theo kiến trúc kho dữ liệu chuẩn gồm hai vùng (Schemas)
+
+Vùng Staging (stg): Lưu trữ dữ liệu thô (raw data) được nạp trực tiếp từ các tệp Excel/CSV hoặc API.
+Vùng Kho Dữ Liệu (dwh): Lưu trữ dữ liệu đã được làm sạch, biến đổi và tổ chức theo mô hình hình sao (Star Schema) phục vụ phân tích, chạy mô hình Học máy (Machine Learning) và trực quan hóa lên Power BI.
+1. Schema dữ liệu thô: stg (Staging Schema)
+Schema này chứa dữ liệu thô của 5 ngân hàng thương mại Việt Nam lớn: ACB, TCB, TPB, VCB, VPB giai đoạn 2021-2025. Dữ liệu được tổ chức dưới dạng các bảng đơn lẻ cho từng ngân hàng và sau đó gộp vào các bảng hợp nhất (stg_all_*).
+
+1.1 Các bảng dữ liệu giá cổ phiếu hàng ngày (Daily Prices)
+Các bảng thành viên: stg.stg_acb_daily_prices, stg.stg_tcb_daily_prices, stg.stg_tpb_daily_prices, stg.stg_vcb_daily_prices, stg.stg_vpb_daily_prices
+Bảng hợp nhất: stg.stg_all_price_daily
+Các trường dữ liệu (Columns):
+process_dt (VARCHAR): Ngày giao dịch (định dạng YYYY-MM-DD).
+open (NUMERIC): Giá mở cửa.
+high (NUMERIC): Giá cao nhất trong ngày.
+low (NUMERIC): Giá thấp nhất trong ngày.
+close (NUMERIC): Giá đóng cửa.
+volumn (NUMERIC): Khối lượng giao dịch.
+tổng buy của nhà đầu tư ngoại (NUMERIC): Khối lượng khối ngoại mua.
+tổng sell của nhà đầu tư ngoại (NUMERIC): Khối lượng khối ngoại bán.
