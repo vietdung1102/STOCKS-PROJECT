@@ -46,7 +46,8 @@ item / item_en (VARCHAR): Tên chỉ tiêu tiếng Việt và tiếng Anh.
 2021-Q1 đến 2026-Q1 (NUMERIC): Giá trị của chỉ tiêu theo từng quý.
 
 
-2.1 Các bảng chiều (Dimension Tables - dim_*)
+**2.1 Các bảng chiều (Dimension Tables - dim_*)**
+
 Bảng chiều cổ phiếu: dwh.dim_symbol
 Ý nghĩa: Danh mục các ngân hàng nằm trong hệ thống phân tích.
 Cấu trúc:
@@ -61,10 +62,15 @@ metric_name (VARCHAR): Tên hiển thị chỉ báo.
 metric_group (VARCHAR): Nhóm chỉ báo (Financial - Tài chính / Technical - Kỹ thuật).
 metric_type (VARCHAR): Loại (Valuation, Efficiency, Health, Momentum, Trend, Volatility, Volume).
 metric_desc (VARCHAR): Mô tả chi tiết chỉ số.
+
 Bảng chiều chỉ tiêu trung gian: dwh.dim_intermediate_metrics
 Ý nghĩa: Danh mục các chỉ tiêu tài chính thô dùng để tính toán các chỉ số tài chính (Ví dụ: Lợi nhuận sau thuế, Vốn chủ sở hữu, Tổng nợ xấu, Tổng dư nợ, Vốn tự có, Tài sản có rủi ro).
-2.2 Các bảng sự kiện (Fact Tables - fact_*)
+
+
+**2.2 Các bảng sự kiện (Fact Tables - fact_*)**
+
 Bảng nến tháng giá cổ phiếu: dwh.fact_price_monthly_end
+
 Ý nghĩa: Lưu trữ lịch sử giá cổ phiếu gộp theo tháng (dùng vẽ biểu đồ đường giá và tính các chỉ báo kỹ thuật RSI, MACD, Bollinger Bands, OBV).
 Cấu trúc:
 id (BIGSERIAL, Primary Key): Khóa chính.
@@ -73,6 +79,7 @@ year_month (VARCHAR(7)): Tháng (YYYY-MM).
 process_dt (DATE): Ngày giao dịch cuối cùng của tháng.
 open, high, low, close (NUMERIC): Các giá trị nến tháng.
 volumn (NUMERIC): Khối lượng giao dịch của cả tháng.
+
 Bảng chỉ số tài chính 5 năm: dwh.fact_yearly_metrics_fin
 Ý nghĩa: Lưu trữ giá trị lịch sử của 5 chỉ số tài chính (P/E, P/B, ROE, NPL, CAR) của các ngân hàng từ năm 2021 đến 2025.
 Cấu trúc:
@@ -81,6 +88,8 @@ symbol_id (INT, Foreign Key): Liên kết tới dim_symbol.
 metric_id (INT, Foreign Key): Liên kết tới dim_metrics.
 year_key (INT): Năm tài chính (2021 - 2025).
 value (NUMERIC): Giá trị chỉ số.
+
+
 Bảng đánh giá mô hình tổng hợp: dwh.fact_model_evaluation
 Ý nghĩa: Lưu trữ đánh giá chiến lược tổng hợp của ngày gần nhất và biên độ giá dự báo cho năm 2026.
 Cấu trúc:
@@ -93,6 +102,8 @@ pred_min, pred_avg, pred_max (NUMERIC): Biên độ giá dự báo năm 2026 (Th
 pred_trend (VARCHAR): Xu hướng dự báo (Tăng / Giảm).
 conclusion (TEXT): Kết luận chiến lược bằng tiếng Việt.
 action_rec (TEXT): Khuyến nghị hành động và vùng giá mua cụ thể.
+
+
 Bảng chi tiết điểm số chỉ số: dwh.fact_model_scoring_details
 Ý nghĩa: Lưu chi tiết điểm số, tín hiệu mua/bán và văn bản chẩn đoán của từng chỉ báo trong số 13 chỉ báo tại ngày chạy mô hình.
 Cấu trúc:
@@ -105,14 +116,12 @@ strength (VARCHAR): Sức mạnh của tín hiệu (Ví dụ: "70% Buy").
 description (TEXT): Nhận xét xu hướng hoặc giải thích độ dốc (Ví dụ: "Xu hướng 5 năm (Giảm -1.4%/năm)").
 
 
-
-
-
 ### Bước 2.2: Xây dựng Mô hình Chấm điểm (Scoring Model)
 Sử dụng Python để xây dựng hệ thống chấm điểm tổng hợp dựa trên 13 chỉ báo cốt lõi (Khóa chặt dữ liệu đến cuối 2025):
 - **8 Chỉ báo Kỹ thuật (Tầm nhìn Dài hạn theo Tháng):** RSI, MA20, EMA20, MACD, Bollinger Bands (BB), ATR, Volume, OBV. Các chỉ báo này được tính toán trên **Khung Tháng (Monthly Timeframe)**, hấp thụ hoàn toàn các nhiễu động ngày để cung cấp tín hiệu cực kỳ bền vững.
 - **5 Chỉ báo Tài chính (Định giá & Sức khỏe):** Sử dụng thuật toán Đo lường độ dốc **Xu hướng (Trend) 5 năm (2021-2025)** của P/E, P/B, ROE, NPL và CAR. Cổ phiếu chỉ được đánh giá cao khi có xu hướng cơ bản cải thiện mạnh mẽ.
 - **Đầu ra:** Trả về Tỷ lệ % MUA (Buy Ratio) và Tỷ lệ % BÁN (Sell Ratio) cho mỗi cổ phiếu.
+
 
 ### Bước 2.3: Mô hình Học máy Dự phóng Giá (Machine Learning Prediction)
 - **Thuật toán:** Hồi quy tuyến tính (Linear Regression) thông qua thư viện `scikit-learn`.
