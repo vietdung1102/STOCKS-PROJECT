@@ -24,20 +24,27 @@ Hệ thống chia làm 2 phân vùng dữ liệu chính:
     *   *Fact tables:* `fact_price_monthly_end` (lịch sử nến tháng), `fact_yearly_metrics_fin` (lịch sử chỉ số tài chính), `fact_model_evaluation` (kết luận chiến lược tổng hợp), `fact_model_scoring_details` (chi tiết chấm điểm từng chỉ báo).
 
 ### 3.2 Quy trình xử lý dữ liệu (Data Pipeline)
-Dữ liệu được xử lý tuần tự qua các tệp script Python trong thư mục gốc:
-```mermaid
-graph TD
-    A[init_db.py: Khởi tạo Schemas] --> B[load_to_stg.py: Nạp dữ liệu thô Excel/CSV vào STG]
-    B --> C[init_dwh.py: Tạo Dimensions & Nạp danh mục]
-    C --> D[merge_stg_all.py: Hợp nhất dữ liệu thô các ngân hàng]
-    D --> E[init_dwh_procedures.py: Chạy Stored Procedures gộp nến tháng & tính toán]
-    E --> F[stock_scoring_model.py: Tính toán 13 chỉ báo & chấm điểm mua/bán]
-    E --> G[price_prediction_2026.py: Chạy mô hình ML dự báo biên độ giá 2026]
-    F --> H[evaluation_strategy.py: Tổng hợp khuyến nghị đầu tư vào DWH]
-    G --> H
-```
+Quy trình phân tích dữ liệu trải qua 5 bước :
 
----
+[Bước 1: ETL & DWH Setup] ──> [Bước 2: Scoring Model] ──> [Bước 3: ML Price Forecast] ──> [Bước 4: Consensus Strategy] ──> [Bước 5: Power BI Visual]
+
+**Bước 1: ETL & Thiết lập Kho dữ liệu:** 
+    Chạy `init_db.py`, `load_to_stg.py` để đẩy dữ liệu thô vào schema `stg`. Sau đó chạy `init_dwh.py` và `merge_stg_all.py` để tạo các bảng liên kết. Thực thi stored procedure (`init_dwh_procedures.py`) gộp nến ngày thành nến tháng để tối ưu dung lượng phân tích dài hạn.
+2.  **Bước 2: Chạy mô hình Chấm điểm Định lượng (Quantitative Scoring):**
+    Script `stock_scoring_model.py` tính toán **13 chỉ số sức khỏe** hàng tháng:
+    *   *8 Chỉ báo kỹ thuật:* RSI (Động lượng), MA20 & EMA (Xu hướng), MACD (Đảo chiều), Bollinger Bands (Biến động), ATR (Biến động thực tế), Volume & OBV (Dòng tiền lũy kế).
+    *   *5 Chỉ số tài chính:* P/E, P/B (Định giá), ROE (Sinh lời), NPL (Nợ xấu), CAR (An toàn vốn).
+    *   Đầu ra: Gán tín hiệu **Buy/Sell/Neutral** cho từng chỉ số của từng ngân hàng tại kỳ đánh giá.
+3.  **Bước 3: Dự phóng khoảng giá bằng Machine Learning:**
+    Script `price_prediction_2026.py` sử dụng thuật toán hồi quy tuyến tính đa biến và phân tích biên độ lịch sử trên chuỗi thời gian nến tháng để tính toán 3 kịch bản giá cho năm 2026: Giá thấp nhất (Min), Giá trung bình (Avg), và Giá cao nhất (Max).
+4.  **Bước 4: Tổng hợp Chiến lược Đồng thuận (Consensus Strategy):**
+    Script `evaluation_strategy.py` kết hợp điểm số định lượng (tổng hợp thành % Tín hiệu Mua) với xu hướng ML dự phóng để đưa ra kết luận chiến lược bằng ngôn ngữ tự nhiên:
+    *   Scoring > 50% + ML Trend Tăng = **Đồng thuận TÍCH CỰC** (Khuyến nghị: Mua gom ở vùng giá chiết khấu cụ thể).
+    *   Scoring < 50% + ML Trend Giảm = **Đồng thuận TIÊU CỰC** (Khuyến nghị: Bán giảm tỷ trọng ở các nhịp hồi phục kỹ thuật).
+    *   Tín hiệu mâu thuẫn = **Phân kỳ** (Khuyến nghị: Đứng ngoài quan sát).
+5.  **Bước 5: Tích hợp và trực quan hóa Power BI:**
+    Liên kết dữ liệu từ PostgreSQL lên Power BI Desktop thông qua cơ chế DirectQuery/Import để hiển thị báo cáo tương tác tự động.
+
 
 ## 4. Phân Tích Chi Tiết Các Trang Dashboard
 
@@ -60,10 +67,21 @@ graph TD
     *   **Biểu đồ Đường Hiệu suất & Sức khỏe (ROE, NPL, CAR):** Vẽ 3 đường biểu diễn tỷ suất sinh lời ROE, tỷ lệ nợ xấu NPL và tỷ lệ an toàn vốn CAR qua các năm để đánh giá chất lượng tài sản và hiệu quả hoạt động dài hạn.
     *   **Bảng Chẩn đoán Tài chính & Độ dốc Xu hướng (Slope):** Hiển thị chi tiết giá trị hiện tại của các chỉ số tài chính kèm theo chẩn đoán xu hướng dài hạn (ví dụ: *Xu hướng 5 năm (Tăng +4.8%/năm)*) được tính toán tự động bằng thuật toán hồi quy tuyến tính trong Python.
 
----
+## 5. Kết Quả & Insight Rút Ra (Key Insights)
 
-## 5. Kết Luận Dự Án (Project Conclusion)
-1.  **Về mặt Công nghệ & Kiến trúc:** Dự án xây dựng thành công luồng xử lý tự động (Data Pipeline) từ dữ liệu thô lên kho dữ liệu có cấu trúc hình sao. Việc tích hợp trực tiếp PostgreSQL với Power BI giúp dashboard cập nhật ngay khi các script Python được kích hoạt lại.
-2.  **Về mặt Giá trị Phân tích:** Hệ thống giúp nhà đầu tư loại bỏ yếu tố cảm tính bằng cách số hóa tín hiệu giao dịch. Khuyến nghị vùng giá giải ngân dựa trên biên độ dự báo của mô hình học máy (Machine Learning) mang lại độ tin cậy và biên an toàn cao hơn cho hoạt động quản lý danh mục đầu tư.
-3.  **Hướng phát triển tương lai:** Dự án có thể mở rộng bằng cách tích hợp dữ liệu giao dịch thời gian thực (Real-time), cập nhật thêm chỉ tiêu tài chính quý, hoặc áp dụng các mô hình học sâu (Deep Learning like LSTM, GRU) để tăng độ chính xác của dự báo biên độ giá.
+### 5.1 Bức tranh toàn cảnh ngành ngân hàng (Giai đoạn 2021 - 2025)
+Từ chuỗi dữ liệu lịch sử được tích hợp trong kho dữ liệu, có 3 xu hướng vĩ mô lớn của hệ thống ngân hàng thương mại Việt Nam lộ diện:
+*   **Sự phân hóa mạnh mẽ về chất lượng tài sản (NPL):** Tỷ lệ nợ xấu (NPL) toàn hệ thống có xu hướng gia tăng từ 2021 đến 2025 do tác động của thị trường bất động sản đóng băng và kinh tế phục hồi chậm. Tuy nhiên, mức độ kiểm soát rất khác nhau. Nhóm ngân hàng quốc doanh (VCB) và bán lẻ thận trọng (ACB) kiểm soát NPL cực tốt (VCB < 0.9%, ACB < 1.3%), trong khi nhóm ngân hàng cho vay tiêu dùng (VPB) chịu áp lực nợ xấu cao hơn hẳn (NPL chạm mức 2.45% năm 2025).
+*   **Độ dày bộ đệm vốn (CAR) được gia cố:** Dưới sự giám sát của Ngân hàng Nhà nước, hầu hết các ngân hàng đều tăng trưởng hệ số an toàn vốn CAR qua các năm (ACB tăng từ 13.3% lên 13.9%, VPB đạt đỉnh 15.8% nhờ bán vốn cho cổ đông chiến lược SMBC).
+*   **Bẫy định giá ngắn hạn:** Giai đoạn cuối năm 2025 chứng kiến sự phục hồi mạnh về giá của cổ phiếu ngân hàng. Việc giá tăng nhanh khiến định giá định lượng P/E và P/B của nhiều mã vượt qua trung bình lịch sử 5 năm, kích hoạt tín hiệu "Sell" (Bán) ở góc độ định giá cơ bản, tạo ra hiện tượng **Phân kỳ** giữa xu hướng kỹ thuật ngắn hạn (đang tăng) và định giá cơ bản (đang đắt).
+
+  ## 5.2 Chi tiết phân tích & khuyến nghị cụ thể cho 5 ngân hàng
+
+| Mã CK | Tỷ lệ Mua | Biên độ dự phóng 2026 | Kết luận của mô hình | Khuyến nghị chiến lược |
+| :---: | :---: | :---: | :--- | :--- |
+| **ACB** | **55%** | **20.9k - 29.1k** (Avg: 24.3k) | 🟢 **Đồng thuận TÍCH CỰC** | Chờ mua gom ở vùng giá chiết khấu **21.6k - 22.8k**. |
+| **VCB** | **54%** | **67.5k - 81.9k** (Avg: 74.4k) | 🟡 Phân kỳ (Giá đắt - Xu hướng Tăng) | Nắm giữ nếu có sẵn, hạn chế mua đuổi giá cao. |
+| **TPB** | **54%** | **12.4k - 18.8k** (Avg: 15.2k) | 🟡 Phân kỳ (Giá đắt - Xu hướng Tăng) | Nắm giữ nếu có sẵn, hạn chế mua đuổi giá cao. |
+| **VPB** | **53%** | **18.4k - 27.4k** (Avg: 22.2k) | 🟡 Phân kỳ (Giá đắt - Xu hướng Tăng) | Nắm giữ nếu có sẵn, hạn chế mua đuổi giá cao. |
+| **TCB** | **48%** | **21.0k - 34.3k** (Avg: 27.7k) | 🟡 Phân kỳ (Giá đắt - Xu hướng Tăng) | Nắm giữ nếu có sẵn, hạn chế mua đuổi giá cao. |
 
