@@ -30,19 +30,22 @@ Quy trình phân tích dữ liệu trải qua 5 bước :
 
 **Bước 1: ETL & Thiết lập Kho dữ liệu:** 
     Chạy `init_db.py`, `load_to_stg.py` để đẩy dữ liệu thô vào schema `stg`. Sau đó chạy `init_dwh.py` và `merge_stg_all.py` để tạo các bảng liên kết. Thực thi stored procedure (`init_dwh_procedures.py`) gộp nến ngày thành nến tháng để tối ưu dung lượng phân tích dài hạn.
-2.  **Bước 2: Chạy mô hình Chấm điểm Định lượng (Quantitative Scoring):**
+    
+**Bước 2: Chạy mô hình Chấm điểm Định lượng (Quantitative Scoring):**
     Script `stock_scoring_model.py` tính toán **13 chỉ số sức khỏe** hàng tháng:
     *   *8 Chỉ báo kỹ thuật:* RSI (Động lượng), MA20 & EMA (Xu hướng), MACD (Đảo chiều), Bollinger Bands (Biến động), ATR (Biến động thực tế), Volume & OBV (Dòng tiền lũy kế).
     *   *5 Chỉ số tài chính:* P/E, P/B (Định giá), ROE (Sinh lời), NPL (Nợ xấu), CAR (An toàn vốn).
     *   Đầu ra: Gán tín hiệu **Buy/Sell/Neutral** cho từng chỉ số của từng ngân hàng tại kỳ đánh giá.
-3.  **Bước 3: Dự phóng khoảng giá bằng Machine Learning:**
+    
+**Bước 3: Dự phóng khoảng giá bằng Machine Learning:**
     Script `price_prediction_2026.py` sử dụng thuật toán hồi quy tuyến tính đa biến và phân tích biên độ lịch sử trên chuỗi thời gian nến tháng để tính toán 3 kịch bản giá cho năm 2026: Giá thấp nhất (Min), Giá trung bình (Avg), và Giá cao nhất (Max).
-4.  **Bước 4: Tổng hợp Chiến lược Đồng thuận (Consensus Strategy):**
+    
+**Bước 4: Tổng hợp Chiến lược Đồng thuận (Consensus Strategy):**
     Script `evaluation_strategy.py` kết hợp điểm số định lượng (tổng hợp thành % Tín hiệu Mua) với xu hướng ML dự phóng để đưa ra kết luận chiến lược bằng ngôn ngữ tự nhiên:
     *   Scoring > 50% + ML Trend Tăng = **Đồng thuận TÍCH CỰC** (Khuyến nghị: Mua gom ở vùng giá chiết khấu cụ thể).
     *   Scoring < 50% + ML Trend Giảm = **Đồng thuận TIÊU CỰC** (Khuyến nghị: Bán giảm tỷ trọng ở các nhịp hồi phục kỹ thuật).
     *   Tín hiệu mâu thuẫn = **Phân kỳ** (Khuyến nghị: Đứng ngoài quan sát).
-5.  **Bước 5: Tích hợp và trực quan hóa Power BI:**
+**Bước 5: Tích hợp và trực quan hóa Power BI:**
     Liên kết dữ liệu từ PostgreSQL lên Power BI Desktop thông qua cơ chế DirectQuery/Import để hiển thị báo cáo tương tác tự động.
 
 
